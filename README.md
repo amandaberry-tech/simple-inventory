@@ -46,7 +46,7 @@ This Inventory Management Website is a simple web application designed to manage
      ];
      ```
 4. **Start the Development Server**:
-   - Launch XAMPP and start Apache and MySQL.
+   - Launch XAMPP and start Apache.
    - Place the project folder in the XAMPP `htdocs` directory.
    - Access the website at `http://localhost/your-project-folder`.
 
