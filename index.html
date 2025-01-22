@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <img src="img/simple-inventory-logo.png" />
+    <form id="addItemForm">
+        <input type="text" name="item_name" placeholder="Item Name" required />
+        <input type="number" name="quantity" placeholder="Quantity" required />
+        <input type="number" step="0.01" name="price" placeholder="Price" required />
+        <button type="submit">Add Item</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="inventoryTableBody">
+            <!-- Data will populate here -->
+        </tbody>
+    </table>
+    <script>
+        async function fetchInventory() {
+    try {
+        const response = await fetch('fetch_inventory.php'); // Ensure the endpoint is correct
+        if (!response.ok) {
+            throw new Error("Failed to fetch inventory data.");
+        }
+
+        const data = await response.json();
+        console.log("Fetched data:", data); // Debug: Inspect fetched data in the console
+        const tbody = document.getElementById('inventoryTableBody');
+        tbody.innerHTML = ''; // Clear the table body
+
+        // Populate the table
+        data.forEach(item => {
+            const row = `
+                <tr>
+                    <td>${item.ID}</td>
+                    <td>${item.ItemName}</td>
+                    <td>${item.Quantity}</td>
+                    <td>${parseFloat(item.Price || 0).toFixed(2)}</td>
+                    <td>
+                        <button onclick="deleteItem(${item.ID})">Delete</button>
+                    </td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+    } catch (error) {
+        console.error("Error fetching inventory:", error); // Debug: Log errors
+    }
+}
+
+// Existing fetchInventory function is fine, no changes needed.
+
+document.getElementById("addItemForm").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent form from submitting traditionally
+
+    // Gather form data
+    const formData = new FormData(event.target);
+
+    try {
+        // Submit data to the server
+        const response = await fetch('add_item.php', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const result = await response.json(); // Parse response
+        if (result.success) {
+            console.log("Item added successfully:", result);
+            fetchInventory(); // Refresh the table after successful addition
+        } else {
+            console.error("Error adding item:", result.error);
+            alert("Failed to add item: " + (result.error || "Unknown error"));
+        }
+    } catch (error) {
+        console.error("Error during form submission:", error);
+    }
+});
+
+
+// Call fetchInventory when the page loads
+window.addEventListener('DOMContentLoaded', fetchInventory);
+
+    </script>
+</body>
+</html>
+
