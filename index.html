@@ -86,8 +86,6 @@
     }
 }
 
-// Existing fetchInventory function is fine, no changes needed.
-
 document.getElementById("addItemForm").addEventListener("submit", async function (event) {
     event.preventDefault(); // Prevent form from submitting traditionally
 
@@ -113,6 +111,37 @@ document.getElementById("addItemForm").addEventListener("submit", async function
         console.error("Error during form submission:", error);
     }
 });
+
+async function deleteItem(itemId) {
+    // Show confirmation dialog
+    const confirmed = confirm("Are you sure you want to delete this item?");
+    if (!confirmed) {
+        return; // Do nothing if the user cancels
+    }
+
+    // Proceed with deletion if confirmed
+    try {
+        const response = await fetch('delete_item.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `id=${encodeURIComponent(itemId)}`
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert("Item deleted successfully!"); // Show a success message
+            // Refresh the inventory list after deletion
+            fetchInventory();
+        } else {
+            alert("Error deleting item: " + result.message); // Show error if deletion fails
+        }
+    } catch (error) {
+        alert("Request failed: " + error.message); // Handle network errors
+    }
+}
 
 
 // Call fetchInventory when the page loads

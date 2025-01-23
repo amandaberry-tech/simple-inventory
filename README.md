@@ -1,4 +1,4 @@
-# simple-inventory
+# Simple Inventory
 
 ## Overview
 
@@ -9,7 +9,7 @@ This Inventory Management Website is a simple web application designed to manage
 1. **View Inventory**: Displays the current inventory with item ID, name, quantity, and price.
 2. **Add Items**: Add new inventory items through a simple form.
 3. **Update Quantities**: Automatically updates quantities if an item with the same name is added.
-4. **Delete Items**: Remove items from the inventory.
+4. **Delete Items with Confirmation**: Remove items from the inventory with a UI popup to confirm the deletion.
 
 ## Technologies Used
 
@@ -46,7 +46,7 @@ This Inventory Management Website is a simple web application designed to manage
      ];
      ```
 4. **Start the Development Server**:
-   - Launch XAMPP and start Apache.
+   - Launch XAMPP and start Apache and MySQL.
    - Place the project folder in the XAMPP `htdocs` directory.
    - Access the website at `http://localhost/your-project-folder`.
 
@@ -57,7 +57,7 @@ project-folder/
 |-- index.html          # Main UI for the inventory system
 |-- fetch_inventory.php # Fetch inventory data from the database
 |-- add_item.php        # Add new items or update quantities in the database
-|-- delete_item.php     # Delete items from the database (optional future feature)
+|-- delete_item.php     # Delete items from the database with confirmation
 |-- styles.css          # Custom styles for the website
 ```
 
@@ -71,21 +71,33 @@ project-folder/
 
 - When a new item is submitted via the form, the `add_item.php` script is called via a `POST` request. If the item already exists, the quantity is updated; otherwise, a new record is created.
 
+### Deleting Items with Confirmation
+
+- The `delete_item.php` script now includes a confirmation popup triggered by a JavaScript function. Users must confirm deletion before the item is removed from the database.
+
 ### Updating the Table
 
-- After each update, the inventory table is refreshed by calling the `fetchInventory` function to reflect the latest database state.
+- After each operation (add or delete), the inventory table is refreshed by calling the `fetchInventory` function to reflect the latest database state.
+
+## Latest Updates
+
+### Confirmation Popup for Deletion
+- Implemented a user interface popup to confirm deletion before removing an item from the inventory.
+- When the user clicks the "Delete" button, a confirmation dialog appears. If the user confirms, the item is deleted from the inventory and the database; otherwise, the action is canceled.
+
+### How to Test
+1. Launch the application.
+2. Click the "Delete" button for any inventory item in the table.
+3. Verify that a confirmation popup appears asking if you want to delete the item.
+4. Choose "Cancel" to stop the deletion process or "OK" to confirm it.
+5. Ensure that the table updates dynamically to reflect the deletion (without requiring a page reload).
 
 ## Known Issues and Improvements
 
-- **Delete Functionality**: Currently, deleting items is implemented but needs further enhancements.
 - **Validation**: Client-side validation could be enhanced to prevent invalid entries.
 - **UX**: Adding more visual feedback (e.g., success or error messages) could improve user experience.
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
----
-
-
 
