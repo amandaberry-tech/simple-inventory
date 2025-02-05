@@ -1,5 +1,4 @@
 ![image alt](https://github.com/amandaberry-tech/simple-inventory/blob/main/img/simple-inventory-logo.png?raw=true)
-# Simple Inventory
 
 ## Overview
 
